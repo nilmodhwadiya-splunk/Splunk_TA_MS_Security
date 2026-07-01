@@ -1,0 +1,87 @@
+<form version="1.1" hideEdit="true">
+    <label>MS Security TA Errors</label>
+    <fieldset submitButton="false">
+        <input type="time" token="log_time">
+            <label>Time for logs</label>
+            <default>
+                <earliest>-4h@m</earliest>
+                <latest>now</latest>
+            </default>
+        </input>
+    </fieldset>
+    <row>
+        <panel>
+            <title>ATP Alerts errors</title>
+            <table>
+                <title>ATP Alerts</title>
+                <search>
+                    <query>index="_internal" sourcetype="ta:ms:security:atp_alerts" ERROR | rex field=_raw "requests.exceptions.HTTPError:\s+(?&lt;status_code&gt;\d+)\s+[\s\w]+:\s+(?&lt;message&gt;[\w\s]+)\s+for url" | eval ErrorCode = coalesce(replace(message," ", "")."_".status_code, "N/A"), Traceback=_raw | lookup ms_security_err_codes ErrorCode OUTPUT ActionItem | table Traceback ActionItem</query>
+                    <earliest>$log_time.earliest$</earliest>
+                    <latest>$log_time.latest$</latest>
+                </search>
+                <option name="drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </table>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Defender Incidents errors</title>
+            <table>
+                <title>Defender Incidents</title>
+                <search>
+                    <query>index="_internal" sourcetype="ta:ms:security:incidents" ERROR | rex field=_raw "requests.exceptions.HTTPError:\s+(?&lt;status_code&gt;\d+)\s+[\s\w]+:\s+(?&lt;message&gt;[\w\s]+)\s+for url" | eval ErrorCode = coalesce(replace(message," ", "")."_".status_code, "N/A"), Traceback=_raw | lookup ms_security_err_codes ErrorCode OUTPUT ActionItem | table Traceback ActionItem</query>
+                    <earliest>$log_time.earliest$</earliest>
+                    <latest>$log_time.latest$</latest>
+                </search>
+                <option name="drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </table>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Defender EventHub Input errors</title>
+            <table>
+                <title>Defender EventHub Advanced Hunting Events</title>
+                <search>
+                    <query>index="_internal" sourcetype="ta:ms:security:eventhub_events" ERROR | table _raw</query>
+                    <earliest>$log_time.earliest$</earliest>
+                    <latest>$log_time.latest$</latest>
+                </search>
+                <option name="list.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </table>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Advance Hunting errors</title>
+            <event>
+                <title>Query results</title>
+                <search>
+                    <query>index="_internal" sourcetype="ta:ms:security:advance_hunting" ERROR | table _raw</query>
+                    <earliest>$log_time.earliest$</earliest>
+                    <latest>$log_time.latest$</latest>
+                </search>
+                <option name="list.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </event>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Defender Simulations errors</title>
+            <table>
+                <title>Defender Simulations</title>
+                <search>
+                    <query>index="_internal" sourcetype="ta:ms:security:simulations" ERROR | table _raw</query>
+                    <earliest>$log_time.earliest$</earliest>
+                    <latest>$log_time.latest$</latest>
+                </search>
+                <option name="list.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </table>
+        </panel>
+    </row>
+</form>

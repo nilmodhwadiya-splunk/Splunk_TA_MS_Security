@@ -1,0 +1,215 @@
+<form version="1.1" hideEdit="true">
+  <label>MS Security TA logs</label>
+  <fieldset submitButton="false">
+    <input type="time" token="log_time">
+      <label>Time for logs</label>
+      <default>
+        <earliest>-4h@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Microsoft Security TA version</title>
+      <single>
+        <search>
+          <query>| rest services/apps/local/Splunk_TA_MS_Security splunk_server=local| fields version</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Roles for the MS Security</title>
+      <table>
+        <title>(Requires DEBUG logs enabled)</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:*" token_roles=* | dedup sourcetype token_roles | eval InputType=substr(sourcetype, 16) | rename token_roles as "Token Roles" | table _time InputType "Token Roles"</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>CPU consumption</title>
+      <chart>
+        <title>(Supported only on specific OS)</title>
+        <search>
+          <query>index="_introspection" component="PerProcess" data.args IN ("*microsoft_defender_endpoint_atp_alerts*", "*microsoft_365_defender_endpoint_incidents*", "*microsoft_defender_endpoint_simulations*", "*microsoft_defender_event_hub*") | eval data_args=if(match('data.args', "microsoft_defender_endpoint_atp_alerts"), "atp_alerts", if(match('data.args', "microsoft_365_defender_endpoint_incidents"), "defender_incidents", if(match('data.args', "microsoft_defender_endpoint_simulations"), "simulations", if(match('data.args', "microsoft_defender_event_hub"), "eventhub_events", null())))) | timechart avg(data.pct_cpu) as "% CPU" by data_args</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleY.text">CPU %</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Memory consumption</title>
+      <chart>
+        <title>(Supported only on specific OS)</title>
+        <search>
+          <query>index="_introspection" component="PerProcess" data.args IN ("*/microsoft_defender_endpoint_atp_alerts*", "*/microsoft_365_defender_endpoint_incidents*", "*/defender_advanced_hunting*", "*/microsoft_defender_endpoint_simulations*", "*/microsoft_defender_event_hub*") | eval data_args=if(match('data.args', "microsoft_defender_endpoint_atp_alerts"), "atp_alerts", if(match('data.args', "microsoft_365_defender_endpoint_incidents"), "defender_incidents", if(match('data.args', "defender_advanced_hunting"), "advance_hunting", if(match('data.args', "microsoft_defender_endpoint_simulations"), "simulations", if(match('data.args', "microsoft_defender_event_hub"), "eventhub_events", null()))))) | timechart max(data.pct_memory) as "% Memory" by data_args</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleY.text">Memory %</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ATP Alerts ingested</title>
+      <chart>
+        <title>ATP Alerts</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:atp_alerts" "ATP Alerts ingested" | table _time atp_alert_count</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Defender Incidents ingested</title>
+      <chart>
+        <title>Defender Incidents</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:incidents" "Incidents ingested" | table _time incident_count</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleY.text"># of Incidents</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <chart>
+        <title>Defender Alerts associated with Incidents</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:incidents" "Incident Alerts ingested" | table _time inc_alert_count</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleY.text"># of Alerts</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Events from EventHub ingested</title>
+      <chart>
+        <title>Eventhub Events</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:eventhub_events" "Finished collecting events" | table _time total_received_batch_count skipped_events ingested_events</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Advance Hunting ingested</title>
+      <chart>
+        <title>Query results</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:advance_hunting" "Number of results" |  table _time hunt_query_result</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Phishing Simulation Attack ingested</title>
+      <chart>
+        <title>Simulations</title>
+        <search>
+          <query>index="_internal" sourcetype="ta:ms:security:simulations" "Simulations ingested" | table _time simulation_count</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>EPS by MS Security sourcetype</title>
+      <chart>
+        <search>
+          <query>index="_internal" source="*metrics.log" group=per_sourcetype_thruput series IN ("ms:defender:atp:alerts", "m365:defender:incident:advanced_hunting", "ms365:defender:incident:alerts", "ms365:defender:incident", "ms:defender:simulations", "ms:defender:eventhub") | stats avg(eps) as EPS by series</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>MS Security .conf current changes</title>
+      <table>
+        <search>
+          <query>index="_configtracker" data.path="*Splunk_TA_MS_Security*" | rex field=data.path "etc/apps/Splunk_TA_MS_Security/\w+/(?&lt;conf_name&gt;[\w-]+.conf)$" | eval full_property='data.changes{}.properties{}.name'."=".'data.changes{}.properties{}.new_value'| stats values(full_property) by data.action, conf_name | rename values(full_property) as "Updated .conf details", data.action as "Conf Action", conf_name as ".conf File"</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>MS Security conf .update frequency</title>
+      <chart>
+        <search>
+          <query>index="_configtracker" data.path="*etc/apps/Splunk_TA_MS_Security*" | rex field=data.path "/(?&lt;conf_name&gt;[\w-]+.conf)$" | eval conf_action=upper('data.action') + " _ " + conf_name| timechart count(data.action) by conf_action</query>
+          <earliest>$log_time.earliest$</earliest>
+          <latest>$log_time.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</form>

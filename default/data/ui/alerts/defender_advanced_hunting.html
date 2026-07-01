@@ -1,0 +1,48 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="defender_advanced_hunting_account_name">Account Name</label>
+        <div class="controls">
+            <splunk-search-dropdown name="action.defender_advanced_hunting.param.account_name"
+                id="defender_advanced_hunting_account_name" label-field="title" value-field="title"
+                search="| rest servicesNS/nobody/Splunk_TA_MS_Security/admin/Splunk_TA_MS_Security_account splunk_server=local | dedup title" />
+            <span class="help-block">
+                Select the account from the ones configured
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_advanced_hunting_environment">Environment</label>
+        <div class="controls">
+            <select name="action.defender_advanced_hunting.param.environment" id="defender_advanced_hunting_environment">
+                <option value="commercial">Commercial</option>
+                <option value="gcc">GCC</option>
+                <option value="gcc-high">GCC High</option>
+                <option value="commercial-graph-api">Commercial & GCC - Graph API</option>
+                <option value="gcc-high-graph-api">GCC High - Graph API</option>
+            </select>
+            <span class="help-block">
+        Environment to collect data from
+    </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_advanced_hunting_tenant_id">Tenant ID</label>
+        <div class="controls">
+            <input type="text" name="action.defender_advanced_hunting.param.tenant_id"
+                id="defender_advanced_hunting_tenant_id" />
+            <span class="help-block">
+                Tenant ID of the selected or configured account (Override default Tenant ID here)
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_advanced_hunting_query">Query</label>
+        <div class="controls">
+            <input type="text" name="action.defender_advanced_hunting.param.query"
+                id="defender_advanced_hunting_query" />
+            <span class="help-block">
+                Advanced Hunting Query, based on which you want to collect the data
+            </span>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,70 @@
+{
+    "dependencies": null,
+    "incompatibleApps": null,
+    "info": {
+        "author": [
+            {
+                "company": null,
+                "email": null,
+                "name": "Splunk, Inc."
+            }
+        ],
+        "classification": {
+            "categories": [
+                "IT Operations",
+                "Security, Fraud & Compliance"
+            ],
+            "developmentStatus": "Production/Stable",
+            "intendedAudience": "IT Professionals"
+        },
+        "commonInformationModels": {
+            "Alert": "==5.2.0",
+            "Authentication": "==5.2.0",
+            "Certificates": "==5.2.0",
+            "Compute Inventory": "==5.2.0",
+            "Email": "==5.2.0",
+            "Endpoint": "==5.2.0",
+            "Ticket Management": "==5.2.0"
+        },
+        "description": "Splunk Add-on for Microsoft Security",
+        "id": {
+            "group": null,
+            "name": "Splunk_TA_MS_Security",
+            "version": "2.3.3"
+        },
+        "license": {
+            "name": "Splunk Software License Agreement",
+            "text": "LICENSES/LicenseRef-Splunk-8-2021.txt",
+            "uri": null
+        },
+        "privacyPolicy": {
+            "name": null,
+            "text": null,
+            "uri": null
+        },
+        "releaseDate": null,
+        "releaseNotes": {
+            "name": "README",
+            "text": "README.txt",
+            "uri": "https://splunkbase.splunk.com/app/6207/#/details"
+        },
+        "title": "Splunk Add-on for Microsoft Security"
+    },
+    "inputGroups": null,
+    "platformRequirements": {
+        "splunk": {
+            "Enterprise": "*"
+        }
+    },
+    "schemaVersion": "2.0.0",
+    "supportedDeployments": [
+        "_standalone",
+        "_distributed",
+        "_search_head_clustering"
+    ],
+    "targetWorkloads": [
+        "_search_heads",
+        "_forwarders"
+    ],
+    "tasks": null
+}

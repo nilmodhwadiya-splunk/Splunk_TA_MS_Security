@@ -1,0 +1,108 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_account">Account</label>
+        <div class="controls">
+            <splunk-search-dropdown name="action.defender_update_incident.param.account"
+                id="defender_update_incident_account" label-field="title" value-field="title"
+                search="| rest servicesNS/nobody/Splunk_TA_MS_Security/admin/Splunk_TA_MS_Security_account splunk_server=local | dedup title" />
+            <span class="help-block">
+                Select the account from the ones configured
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_environment">Environment</label>
+        <div class="controls">
+            <select name="action.defender_update_incident.param.environment" id="defender_update_incident_environment">
+                <option value="commercial">Commercial</option>
+                <option value="gcc">GCC</option>
+                <option value="gcc-high">GCC High</option>
+            </select>
+            <span class="help-block">
+            Environment to collect data from
+        </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_tenant_id">Tenant ID</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident.param.tenant_id"
+                id="defender_update_incident_tenant_id" />
+            <span class="help-block">
+                Tenant ID of the selected or configured account (Override default Tenant ID here)
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_incident_id">Incident ID</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident.param.incident_id"
+                id="defender_update_incident_incident_id" />
+            <span class="help-block">
+                Incident ID to be updated if no Incident ID is present in search result events
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_status">Status</label>
+        <div class="controls">
+            <select name="action.defender_update_incident.param.status" id="defender_update_incident_status">
+                <option value="Active">Active</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Redirected">Redirected</option>
+            </select>
+            <span class="help-block">
+                Specifies the current status of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_assigned_to">Assigned to</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident.param.assigned_to"
+                id="defender_update_incident_assigned_to" />
+            <span class="help-block">
+                Owner of the incident.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_classification">Classification </label>
+        <div class="controls">
+            <select name="action.defender_update_incident.param.classification"
+                id="defender_update_incident_classification">
+                <option value="FalsePositive">FalsePositive</option>
+                <option value="TruePositive">TruePositive</option>
+                <option value="Informational, expected activity">Informational, expected activity</option>
+            </select>
+            <span class="help-block">
+                Specification of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_determination">Determination</label>
+        <div class="controls">
+            <select name="action.defender_update_incident.param.determination"
+                id="defender_update_incident_determination">
+                <option value="Malware">Malware</option>
+                <option value="SecurityTesting">SecurityTesting</option>
+                <option value="UnwantedSoftware">UnwantedSoftware</option>
+                <option value="NotAvailable">NotAvailable</option>
+                <option value="Other">Other</option>
+            </select>
+            <span class="help-block">
+                Specifies the determination of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_tags">Tags</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident.param.tags" id="defender_update_incident_tags" />
+            <span class="help-block">
+                List of Incident tags.
+            </span>
+        </div>
+    </div>
+</form>

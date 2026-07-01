@@ -1,0 +1,121 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_account">Account</label>
+        <div class="controls">
+            <splunk-search-dropdown name="action.defender_update_incident_graph.param.account"
+                id="defender_update_incident_graph_account" label-field="title" value-field="title"
+                search="| rest servicesNS/nobody/Splunk_TA_MS_Security/admin/Splunk_TA_MS_Security_account splunk_server=local | dedup title" />
+            <span class="help-block">
+                Select the account from the ones configured
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_environment">Environment</label>
+        <div class="controls">
+            <select name="action.defender_update_incident_graph.param.environment" id="defender_update_incident_graph_environment">
+                <option value="commercial-graph-api">Commercial & GCC</option>
+                <option value="gcc-high-graph-api">GCC High</option>
+            </select>
+            <span class="help-block">
+            Environment to collect data from
+        </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_tenant_id">Tenant ID</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident_graph.param.tenant_id"
+                id="defender_update_incident_graph_tenant_id" />
+            <span class="help-block">
+                Tenant ID of the selected or configured account (Override default Tenant ID here)
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_incident_id">Incident ID</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident_graph.param.incident_id"
+                id="defender_update_incident_graph_incident_id" />
+            <span class="help-block">
+                Incident ID to be updated if no Incident ID is present in search result events
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_status">Status</label>
+        <div class="controls">
+            <select name="action.defender_update_incident_graph.param.status" id="defender_update_incident_graph_status">
+                <option value="active">active</option>
+                <option value="resolved">resolved</option>
+                <option value="redirected">redirected</option>
+                <option value="unknownFutureValue">unknownFutureValue</option>
+            </select>
+            <span class="help-block">
+                Specifies the current status of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_assigned_to">Assigned to</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident_graph.param.assigned_to"
+                id="defender_update_incident_graph_assigned_to" />
+            <span class="help-block">
+                Owner of the incident.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_classification">Classification </label>
+        <div class="controls">
+            <select name="action.defender_update_incident_graph.param.classification"
+                id="defender_update_incident_graph_classification">
+                <option value="falsePositive">falsePositive</option>
+                <option value="truePositive">truePositive</option>
+                <option value="informationalExpectedActivity">informationalExpectedActivity</option>
+                <option value="unknownFutureValue">unknownFutureValue</option>
+                <option value="unknown">unknown</option>
+            </select>
+            <span class="help-block">
+                Specification of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_determination">Determination</label>
+        <div class="controls">
+            <select name="action.defender_update_incident_graph.param.determination"
+                id="defender_update_incident_graph_determination">
+                <option value="apt">apt</option>
+                <option value="malware">malware</option>
+                <option value="securityPersonnel">securityPersonnel</option>
+                <option value="securityTesting">securityTesting</option>
+                <option value="unwantedSoftware">unwantedSoftware</option>
+                <option value="multiStagedAttack">multiStagedAttack</option>
+                <option value="compromisedUser">compromisedUser</option>
+                <option value="phishing">phishing</option>
+                <option value="maliciousUserActivity">maliciousUserActivity</option>
+                <option value="clean">clean</option>
+                <option value="insufficientData">insufficientData</option>
+                <option value="confirmedUserActivity">confirmedUserActivity</option>
+                <option value="lineOfBusinessApplication">lineOfBusinessApplication</option>
+                <option value="other">other</option>
+                <option value="unknown">unknown</option>
+                <option value="unknownFutureValue">unknownFutureValue</option>
+            </select>
+            <span class="help-block">
+                Specifies the determination of the alert.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="defender_update_incident_graph_customTags">Tags</label>
+        <div class="controls">
+            <input type="text" name="action.defender_update_incident_graph.param.customTags" id="defender_update_incident_graph_customTags" />
+            <span class="help-block">
+                List of Incident tags.
+            </span>
+        </div>
+    </div>
+</form>

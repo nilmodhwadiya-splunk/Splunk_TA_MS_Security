@@ -1,0 +1,23 @@
+ErrorCode, ActionItem
+N/A,Please refer to the "Traceback" column for the action item to be performed or contact Splunk support.
+BadRequest_400, General Bad Request error message.
+ODataError_400, Invalid OData URI query <the specific error is specified>.
+InvalidInput_400, Invalid input <the invalid input>.
+InvalidRequestBody_400, Invalid request body.
+InvalidHashValue_400, Hash value <the invalid hash> is invalid.
+InvalidDomainName_400, Domain name <the invalid domain> is invalid.
+InvalidIpAddress_400, IP address <the invalid IP> is invalid.
+InvalidUrl_400, URL <the invalid URL> is invalid.
+MaximumBatchSizeExceeded_400, "Maximum batch size exceeded. Received: <batch size received>, allowed: {batch size allowed}."
+MissingRequiredParameter_400, Parameter <the missing parameter> is missing.
+OsPlatformNotSupported_400, OS Platform <the client OS Platform> is not supported for this action.
+ClientVersionNotSupported_400, <The requested action> is supported on client version <supported client version> and above.
+Unauthorized_401, "Unauthorized
+Note: Usually caused by an invalid or expired authorization header."
+Forbidden_403, "Forbidden
+Note: Valid token but insufficient permission for the action."
+DisabledFeature_403, Tenant feature is not enabled.
+DisallowedOperation_403, <the disallowed operation and the reason>.
+NotFound_404, General Not Found error message.
+ResourceNotFound_404, Resource <the requested resource> was not found.
+InternalServerError_500, "Note: No error message, retry the operation or contact Microsoft if it does not get resolved"
