@@ -1,1231 +1,1359 @@
 {
-    "meta": {
-        "name": "Splunk_TA_MS_Security",
-        "displayName": "Splunk Add-on for Microsoft Security",
-        "version": "2.3.3",
-        "apiVersion": "3.0.0",
-        "restRoot": "Splunk_TA_MS_Security",
-        "schemaVersion": "0.0.3",
-        "os-dependentLibraries": [
+  "meta": {
+    "name": "Splunk_TA_MS_Security",
+    "displayName": "Splunk Add-on for Microsoft Security",
+    "version": "2.3.3",
+    "apiVersion": "3.0.0",
+    "restRoot": "Splunk_TA_MS_Security",
+    "schemaVersion": "0.0.3",
+    "os-dependentLibraries": [
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "win_amd64",
+        "python_version": "37",
+        "target": "3rdparty/windows_x86_64/python37",
+        "os": "windows"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "win_amd64",
+        "python_version": "37",
+        "target": "3rdparty/windows_x86_64/python37",
+        "os": "windows"
+      },
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "manylinux2014_x86_64",
+        "python_version": "37",
+        "target": "3rdparty/linux_x86_64/python37",
+        "os": "linux"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "manylinux2014_x86_64",
+        "python_version": "37",
+        "target": "3rdparty/linux_x86_64/python37",
+        "os": "linux"
+      },
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "macosx_10_12_x86_64",
+        "python_version": "37",
+        "target": "3rdparty/darwin_x86_64/python37",
+        "os": "darwin"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "macosx_10_9_x86_64",
+        "python_version": "37",
+        "target": "3rdparty/darwin_x86_64/python37",
+        "os": "darwin"
+      },
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "win_amd64",
+        "python_version": "39",
+        "target": "3rdparty/windows_x86_64/python39",
+        "os": "windows"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "win_amd64",
+        "python_version": "39",
+        "target": "3rdparty/windows_x86_64/python39",
+        "os": "windows"
+      },
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "manylinux2014_x86_64",
+        "python_version": "39",
+        "target": "3rdparty/linux_x86_64/python39",
+        "os": "linux"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "manylinux2014_x86_64",
+        "python_version": "39",
+        "target": "3rdparty/linux_x86_64/python39",
+        "os": "linux"
+      },
+      {
+        "name": "cryptography",
+        "version": "42.0.4",
+        "platform": "macosx_10_12_x86_64",
+        "python_version": "39",
+        "target": "3rdparty/darwin_x86_64/python39",
+        "os": "darwin"
+      },
+      {
+        "name": "cffi",
+        "version": "1.15.1",
+        "platform": "macosx_10_9_x86_64",
+        "python_version": "39",
+        "target": "3rdparty/darwin_x86_64/python39",
+        "os": "darwin"
+      }
+    ],
+    "_uccVersion": "5.39.1"
+  },
+  "pages": {
+    "configuration": {
+      "title": "Configuration",
+      "description": "Set up your add-on",
+      "tabs": [
+        {
+          "name": "account",
+          "title": "Account",
+          "table": {
+            "header": [
+              {
+                "field": "name",
+                "label": "Account Name"
+              },
+              {
+                "field": "username",
+                "label": "Client ID"
+              }
+            ],
+            "actions": ["edit", "delete", "clone"]
+          },
+          "entity": [
             {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "win_amd64",
-                "python_version": "37",
-                "target": "3rdparty/windows_x86_64/python37",
-                "os": "windows"
+              "field": "name",
+              "label": "Account Name",
+              "type": "text",
+              "required": true,
+              "help": "Enter a unique name for this account.",
+              "options": {
+                "placeholder": "Enter the Account Name here"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "errorMsg": "Length of Account name should be between 1 and 50"
+                },
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Account name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                }
+              ]
             },
             {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "win_amd64",
-                "python_version": "37",
-                "target": "3rdparty/windows_x86_64/python37",
-                "os": "windows"
+              "field": "username",
+              "label": "Client ID",
+              "type": "text",
+              "required": true,
+              "help": "Enter the Client ID for this account.",
+              "options": {
+                "placeholder": "Enter the Client ID here"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "errorMsg": "Length of Client ID should be between 1 and 200"
+                }
+              ]
             },
             {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "manylinux2014_x86_64",
-                "python_version": "37",
-                "target": "3rdparty/linux_x86_64/python37",
-                "os": "linux"
+              "field": "password",
+              "label": "Client Secret",
+              "type": "text",
+              "encrypted": true,
+              "required": true,
+              "help": "Enter the Client Secret for this account.",
+              "options": {
+                "placeholder": "Enter the Client Secret here"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192,
+                  "errorMsg": "Length of Client Secret should be between 1 and 8192"
+                }
+              ]
             },
             {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "manylinux2014_x86_64",
-                "python_version": "37",
-                "target": "3rdparty/linux_x86_64/python37",
-                "os": "linux"
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "type": "text",
+              "encrypted": false,
+              "required": true,
+              "help": "It will be overridden when the Tenant ID is provided in inputs or alert actions.",
+              "options": {
+                "placeholder": "Enter the Tenant ID here"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "errorMsg": "Length of Tenant ID should be between 1 and 200"
+                }
+              ]
             },
             {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "macosx_10_12_x86_64",
-                "python_version": "37",
-                "target": "3rdparty/darwin_x86_64/python37",
-                "os": "darwin"
+              "field": "use_delegated_permissions",
+              "label": "Use delegated permissions",
+              "type": "checkbox",
+              "required": false
             },
             {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "macosx_10_9_x86_64",
-                "python_version": "37",
-                "target": "3rdparty/darwin_x86_64/python37",
-                "os": "darwin"
-            },
-            {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "win_amd64",
-                "python_version": "39",
-                "target": "3rdparty/windows_x86_64/python39",
-                "os": "windows"
-            },
-            {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "win_amd64",
-                "python_version": "39",
-                "target": "3rdparty/windows_x86_64/python39",
-                "os": "windows"
-            },
-            {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "manylinux2014_x86_64",
-                "python_version": "39",
-                "target": "3rdparty/linux_x86_64/python39",
-                "os": "linux"
-            },
-            {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "manylinux2014_x86_64",
-                "python_version": "39",
-                "target": "3rdparty/linux_x86_64/python39",
-                "os": "linux"
-            },
-            {
-                "name": "cryptography",
-                "version": "42.0.4",
-                "platform": "macosx_10_12_x86_64",
-                "python_version": "39",
-                "target": "3rdparty/darwin_x86_64/python39",
-                "os": "darwin"
-            },
-            {
-                "name": "cffi",
-                "version": "1.15.1",
-                "platform": "macosx_10_9_x86_64",
-                "python_version": "39",
-                "target": "3rdparty/darwin_x86_64/python39",
-                "os": "darwin"
+              "field": "delegated_acc_name",
+              "label": "Delegated Access Account Name",
+              "type": "text",
+              "help": "Enter the unique name of the account that you set up in the helper app",
+              "required": false
             }
-        ],
-        "_uccVersion": "5.39.1"
-    },
-    "pages": {
-        "configuration": {
-            "title": "Configuration",
-            "description": "Set up your add-on",
-            "tabs": [
-                {
-                    "name": "account",
-                    "title": "Account",
-                    "table": {
-                        "header": [
-                            {
-                                "field": "name",
-                                "label": "Account Name"
-                            },
-                            {
-                                "field": "username",
-                                "label": "Client ID"
-                            }
-                        ],
-                        "actions": [
-                            "edit",
-                            "delete",
-                            "clone"
-                        ]
-                    },
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Account Name",
-                            "type": "text",
-                            "required": true,
-                            "help": "Enter a unique name for this account.",
-                            "options": {
-                                "placeholder": "Enter the Account Name here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 50,
-                                    "errorMsg": "Length of Account name should be between 1 and 50"
-                                },
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Account name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                }
-                            ]
-                        },
-                        {
-                            "field": "username",
-                            "label": "Client ID",
-                            "type": "text",
-                            "required": true,
-                            "help": "Enter the Client ID for this account.",
-                            "options": {
-                                "placeholder": "Enter the Client ID here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 200,
-                                    "errorMsg": "Length of Client ID should be between 1 and 200"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "password",
-                            "label": "Client Secret",
-                            "type": "text",
-                            "encrypted": true,
-                            "required": true,
-                            "help": "Enter the Client Secret for this account.",
-                            "options": {
-                                "placeholder": "Enter the Client Secret here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Length of Client Secret should be between 1 and 8192"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "tenant_id",
-                            "label": "Tenant ID",
-                            "type": "text",
-                            "encrypted": false,
-                            "required": true,
-                            "help": "It will be overridden when the Tenant ID is provided in inputs or alert actions.",
-                            "options": {
-                                "placeholder": "Enter the Tenant ID here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 200,
-                                    "errorMsg": "Length of Tenant ID should be between 1 and 200"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "use_delegated_permissions",
-                            "label": "Use delegated permissions",
-                            "type": "checkbox",
-                            "required": false
-                        },
-                        {
-                            "field": "delegated_acc_name",
-                            "label": "Delegated Access Account Name",
-                            "type": "text",
-                            "help": "Enter the unique name of the account that you set up in the helper app",
-                            "required": false
-                        }
-                    ]
-                },
-                {
-                    "name": "proxy",
-                    "title": "Proxy Configuration",
-                    "entity": [
-                        {
-                            "field": "proxy_enabled",
-                            "label": "Enable Proxy",
-                            "type": "checkbox"
-                        },
-                        {
-                            "field": "proxy_url",
-                            "label": "Proxy Host",
-                            "type": "text",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Required"
-                            },
-                            "help": "Hostname of the Proxy server",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 4096,
-                                    "errorMsg": "Max host length is 4096"
-                                },
-                                {
-                                    "pattern": "^[a-zA-Z0-9:][a-zA-Z0-9\\.\\-:]+$",
-                                    "errorMsg": "Proxy Host is invalid",
-                                    "type": "regex"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "proxy_port",
-                            "label": "Proxy Port",
-                            "type": "text",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Required"
-                            },
-                            "help": "Port to connect to the Proxy server",
-                            "validators": [
-                                {
-                                    "type": "number",
-                                    "range": [
-                                        1,
-                                        65535
-                                    ]
-                                },
-                                {
-                                    "type": "regex",
-                                    "errorMsg": "Proxy Port field must be an integer.",
-                                    "pattern": "^\\d+$"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "proxy_username",
-                            "label": "Proxy Username",
-                            "type": "text",
-                            "help": "Username to connect to Proxy server, if any.",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 50,
-                                    "errorMsg": "Max length of username is 50"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "proxy_password",
-                            "label": "Proxy Password",
-                            "type": "text",
-                            "encrypted": true,
-                            "help": "Password to connect to Proxy server, if any.",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of password is 8192"
-                                }
-                            ]
-                        }
-                    ],
-                    "options": {
-                        "saveValidator": "function(formData) { if(!formData.proxy_enabled || formData.proxy_enabled === '0') {return true; } if(!formData.proxy_url) { return 'Proxy Host can not be empty'; } if(!formData.proxy_port) { return 'Proxy Port can not be empty'; } return true; }"
-                    }
-                },
-                {
-                    "name": "logging",
-                    "title": "Logging",
-                    "entity": [
-                        {
-                            "field": "loglevel",
-                            "label": "Log Level",
-                            "help": "(DEBUG, INFO, WARNING, ERROR or CRITICAL)",
-                            "type": "singleSelect",
-                            "required": true,
-                            "options": {
-                                "disableSearch": true,
-                                "autoCompleteFields": [
-                                    {
-                                        "label": "DEBUG",
-                                        "value": "DEBUG"
-                                    },
-                                    {
-                                        "label": "INFO",
-                                        "value": "INFO"
-                                    },
-                                    {
-                                        "label": "WARNING",
-                                        "value": "WARNING"
-                                    },
-                                    {
-                                        "label": "ERROR",
-                                        "value": "ERROR"
-                                    },
-                                    {
-                                        "label": "CRITICAL",
-                                        "value": "CRITICAL"
-                                    }
-                                ]
-                            },
-                            "defaultValue": "INFO"
-                        }
-                    ]
-                }
-            ]
+          ]
         },
-        "inputs": {
-            "title": "Inputs",
-            "description": "Manage your data inputs",
-            "table": {
-                "header": [
-                    {
-                        "field": "name",
-                        "label": "Name"
-                    },
-                    {
-                        "field": "interval",
-                        "label": "Interval"
-                    },
-                    {
-                        "field": "index",
-                        "label": "Index"
-                    },
-                    {
-                        "field": "disabled",
-                        "label": "Status"
-                    }
-                ],
-                "moreInfo": [
-                    {
-                        "field": "name",
-                        "label": "Name"
-                    },
-                    {
-                        "field": "interval",
-                        "label": "Interval"
-                    },
-                    {
-                        "field": "index",
-                        "label": "Index"
-                    },
-                    {
-                        "field": "disabled",
-                        "label": "Disabled"
-                    },
-                    {
-                        "field": "azure_app_account",
-                        "label": "Azure App Account"
-                    },
-                    {
-                        "field": "tenant_id",
-                        "label": "Tenant ID"
-                    },
-                    {
-                        "field": "start_date",
-                        "label": "Start Date (optional)"
-                    },
-                    {
-                        "field": "location",
-                        "label": "Location"
-                    },
-                    {
-                        "field": "environment",
-                        "label": "Environment"
-                    },
-                    {
-                        "field": "event_hub_namespace",
-                        "label": "Event Hub Namespace(FQDN)"
-                    },
-                    {
-                        "field": "event_hub_name",
-                        "label": "Event Hub Name"
-                    },
-                    {
-                        "field": "consumer_group",
-                        "label": "Consumer Group"
-                    },
-                    {
-                        "field": "streaming_event_types",
-                        "label": "Streaming Event Types"
-                    }
-                ],
-                "actions": [
-                    "edit",
-                    "enable",
-                    "delete",
-                    "clone"
-                ]
+        {
+          "name": "proxy",
+          "title": "Proxy Configuration",
+          "entity": [
+            {
+              "field": "proxy_enabled",
+              "label": "Enable Proxy",
+              "type": "checkbox"
             },
-            "services": [
+            {
+              "field": "proxy_url",
+              "label": "Proxy Host",
+              "type": "text",
+              "required": true,
+              "options": {
+                "placeholder": "Required"
+              },
+              "help": "Hostname of the Proxy server",
+              "validators": [
                 {
-                    "name": "microsoft_365_defender_endpoint_incidents",
-                    "title": "Microsoft 365 Defender Incidents",
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Name",
-                            "type": "text",
-                            "help": "Enter a unique name for the data input",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Enter input name here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                },
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 100,
-                                    "errorMsg": "Length of input name should be between 1 and 100"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "azure_app_account",
-                            "label": "Azure App Account",
-                            "help": "Azure App Account from which the data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "options": {
-                                "referenceName": "account"
-                            }
-                        },
-                        {
-                            "field": "tenant_id",
-                            "label": "Tenant ID",
-                            "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
-                            "required": false,
-                            "type": "text",
-                            "options": {
-                                "placeholder": "Enter Tenant ID here (optional)"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "environment",
-                            "label": "Environment",
-                            "help": "Environment to collect data from",
-                            "required": true,
-                            "type": "singleSelect",
-                            "defaultValue": "commercial",
-                            "options": {
-                                "disableSearch": true,
-                                "autoCompleteFields": [
-                                    {
-                                        "value": "commercial",
-                                        "label": "Commercial"
-                                    },
-                                    {
-                                        "value": "gcc",
-                                        "label": "GCC"
-                                    },
-                                    {
-                                        "value": "gcc-high",
-                                        "label": "GCC High"
-                                    },
-                                    {
-                                        "value": "commercial-graph-api",
-                                        "label": "Commercial & GCC - Graph API"
-                                    },
-                                    {
-                                        "value": "gcc-high-graph-api",
-                                        "label": "GCC High - Graph API"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "field": "start_date",
-                            "label": "Start Date (optional)",
-                            "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ],
-                            "options": {
-                                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "interval",
-                            "label": "Interval",
-                            "type": "text",
-                            "required": true,
-                            "help": "Time interval of input in seconds.",
-                            "options": {
-                                "placeholder": "Enter interval here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[1-9][0-9]*$",
-                                    "errorMsg": "Interval must be an integer greater than 0"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "index",
-                            "label": "Index",
-                            "type": "singleSelect",
-                            "defaultValue": "default",
-                            "options": {
-                                "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
-                            },
-                            "help": "Index in which data will be collected",
-                            "required": true,
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 80,
-                                    "errorMsg": "Length of index name should be between 1 and 80."
-                                }
-                            ]
-                        }
-                    ],
-                    "hook": {
-                        "src": "inputs_hook_2.1.0",
-                        "type": "external"
-                    }
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096,
+                  "errorMsg": "Max host length is 4096"
                 },
                 {
-                    "name": "microsoft_defender_endpoint_atp_alerts",
-                    "title": "Microsoft Defender for Endpoint Alerts",
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Name",
-                            "type": "text",
-                            "help": "Enter a unique name for the data input",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Enter input name here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                },
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 100,
-                                    "errorMsg": "Length of input name should be between 1 and 100"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "azure_app_account",
-                            "label": "Azure App Account",
-                            "help": "Azure App Account from which the data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "options": {
-                                "referenceName": "account"
-                            }
-                        },
-                        {
-                            "field": "tenant_id",
-                            "label": "Tenant ID",
-                            "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
-                            "required": false,
-                            "type": "text",
-                            "options": {
-                                "placeholder": "Enter Tenant ID here (optional)"
-                            },
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "location",
-                            "label": "Location",
-                            "help": "GeoLocation (for API) from which data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "defaultValue": "api.securitycenter.microsoft.com",
-                            "options": {
-                                "disableSearch": true,
-                                "autoCompleteFields": [
-                                    {
-                                        "value": "api.securitycenter.microsoft.com",
-                                        "label": "General"
-                                    },
-                                    {
-                                        "value": "api-us.securitycenter.microsoft.com",
-                                        "label": "US"
-                                    },
-                                    {
-                                        "value": "api-eu.securitycenter.microsoft.com",
-                                        "label": "EU"
-                                    },
-                                    {
-                                        "value": "api-uk.securitycenter.microsoft.com",
-                                        "label": "UK"
-                                    },
-                                    {
-                                        "value": "api-gcc.securitycenter.microsoft.us",
-                                        "label": "GCC"
-                                    },
-                                    {
-                                        "value": "api-gov.securitycenter.microsoft.us",
-                                        "label": "GCC High/DoD"
-                                    },
-                                    {
-                                        "value": "commercial-graph-api",
-                                        "label": "Commercial & GCC - Graph API"
-                                    },
-                                    {
-                                        "value": "gcc-high-graph-api",
-                                        "label": "GCC High - Graph API"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "field": "start_date",
-                            "label": "Start Date (optional)",
-                            "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ],
-                            "options": {
-                                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "interval",
-                            "label": "Interval",
-                            "type": "text",
-                            "required": true,
-                            "help": "Time interval of input in seconds.",
-                            "options": {
-                                "placeholder": "Enter interval here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[1-9][0-9]*$",
-                                    "errorMsg": "Interval must be an integer greater than 0"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "index",
-                            "label": "Index",
-                            "type": "singleSelect",
-                            "defaultValue": "default",
-                            "options": {
-                                "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
-                            },
-                            "required": true,
-                            "help": "Index in which data will be collected",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 80,
-                                    "errorMsg": "Length of index name should be between 1 and 80."
-                                }
-                            ]
-                        }
-                    ],
-                    "hook": {
-                        "src": "inputs_hook_2.1.0",
-                        "type": "external"
-                    }
-                },
-                {
-                    "name": "microsoft_defender_endpoint_simulations",
-                    "title": "Microsoft Defender Simulations",
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Name",
-                            "type": "text",
-                            "help": "Enter a unique name for the data input",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Enter input name here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                },
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 100,
-                                    "errorMsg": "Length of input name should be between 1 and 100"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "azure_app_account",
-                            "label": "Azure App Account",
-                            "help": "Azure App Account from which the data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "options": {
-                                "referenceName": "account"
-                            }
-                        },
-                        {
-                            "field": "environment",
-                            "label": "Environment",
-                            "help": "Environment to collect data from",
-                            "required": true,
-                            "type": "singleSelect",
-                            "defaultValue": "commercial-graph-api",
-                            "options": {
-                                "disableSearch": true,
-                                "autoCompleteFields": [
-                                    {
-                                        "value": "commercial-graph-api",
-                                        "label": "Commercial & GCC - Graph API"
-                                    },
-                                    {
-                                        "value": "gcc-high-graph-api",
-                                        "label": "GCC High - Graph API"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "field": "start_date",
-                            "label": "Start Date (optional)",
-                            "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ],
-                            "options": {
-                                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "interval",
-                            "label": "Interval",
-                            "type": "text",
-                            "required": true,
-                            "help": "Time interval of input in seconds.",
-                            "options": {
-                                "placeholder": "Enter interval here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[1-9][0-9]*$",
-                                    "errorMsg": "Interval must be an integer greater than 0"
-                                },
-                                {
-                                    "type": "number",
-                                    "range": [
-                                        1,
-                                        31536000
-                                    ],
-                                    "errorMsg": "Value should be between 1 and 31536000"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "index",
-                            "label": "Index",
-                            "type": "singleSelect",
-                            "defaultValue": "default",
-                            "options": {
-                                "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
-                            },
-                            "help": "Index in which data will be collected",
-                            "required": true,
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 80,
-                                    "errorMsg": "Length of index name should be between 1 and 80."
-                                }
-                            ]
-                        }
-                    ],
-                    "hook": {
-                        "src": "inputs_hook_2.1.0",
-                        "type": "external"
-                    }
-                },
-                {
-                    "name": "microsoft_defender_event_hub",
-                    "title": "Microsoft Defender Event Hub",
-                    "restHandlerModule": "splunk_ta_ms_security_account_handler_eventhub_rh",
-                    "restHandlerClass": "MSSecurityAccountExternalHandler",
-                    "hook": {
-                        "src": "inputs_hook_2.1.0",
-                        "type": "external"
-                    },
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Name",
-                            "type": "text",
-                            "help": "Enter a unique name for the data input",
-                            "required": true,
-                            "options": {
-                                "placeholder": "Enter input name here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                },
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 100,
-                                    "errorMsg": "Length of input name should be between 1 and 100"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "azure_app_account",
-                            "label": "Azure App Account",
-                            "help": "Azure App Account from which the data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "options": {
-                                "referenceName": "account"
-                            }
-                        },
-                        {
-                            "field": "event_hub_namespace",
-                            "label": "Event Hub Namespace(FQDN)",
-                            "help": "Namespace of the Event Hub",
-                            "type": "text",
-                            "required": true
-                        },
-                        {
-                            "field": "event_hub_name",
-                            "label": "Event Hub Name",
-                            "help": "Name of the Event Hub",
-                            "type": "text",
-                            "required": true,
-                            "options": {
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "consumer_group",
-                            "label": "Consumer Group",
-                            "help": "Consumer Group from Event Hub",
-                            "type": "text",
-                            "defaultValue": "$Default",
-                            "required": true,
-                            "options": {
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "streaming_event_types",
-                            "label": "Streaming Event Types",
-                            "help": "Specify which event types to ingest (Default: All).",
-                            "type": "multipleSelect",
-                            "options": {
-                                "delimiter": ",",
-                                "items": [
-                                    {
-                                        "value": "AlertInfo",
-                                        "label": "AlertInfo"
-                                    },
-                                    {
-                                        "value": "AlertEvidence",
-                                        "label": "AlertEvidence"
-                                    },
-                                    {
-                                        "value": "DeviceInfo",
-                                        "label": "DeviceInfo"
-                                    },
-                                    {
-                                        "value": "DeviceNetworkInfo",
-                                        "label": "DeviceNetworkInfo"
-                                    },
-                                    {
-                                        "value": "DeviceProcessEvents",
-                                        "label": "DeviceProcessEvents"
-                                    },
-                                    {
-                                        "value": "DeviceNetworkEvents",
-                                        "label": "DeviceNetworkEvents"
-                                    },
-                                    {
-                                        "value": "DeviceFileEvents",
-                                        "label": "DeviceFileEvents"
-                                    },
-                                    {
-                                        "value": "DeviceRegistryEvents",
-                                        "label": "DeviceRegistryEvents"
-                                    },
-                                    {
-                                        "value": "DeviceLogonEvents",
-                                        "label": "DeviceLogonEvents"
-                                    },
-                                    {
-                                        "value": "DeviceImageLoadEvents",
-                                        "label": "DeviceImageLoadEvents"
-                                    },
-                                    {
-                                        "value": "DeviceEvents",
-                                        "label": "DeviceEvents"
-                                    },
-                                    {
-                                        "value": "DeviceFileCertificateInfo",
-                                        "label": "DeviceFileCertificateInfo"
-                                    },
-                                    {
-                                        "value": "EmailAttachmentInfo",
-                                        "label": "EmailAttachmentInfo"
-                                    },
-                                    {
-                                        "value": "EmailEvents",
-                                        "label": "EmailEvents"
-                                    },
-                                    {
-                                        "value": "EmailPostDeliveryEvents",
-                                        "label": "EmailPostDeliveryEvents"
-                                    },
-                                    {
-                                        "value": "EmailUrlInfo",
-                                        "label": "EmailUrlInfo"
-                                    },
-                                    {
-                                        "value": "IdentityLogonEvents",
-                                        "label": "IdentityLogonEvents"
-                                    },
-                                    {
-                                        "value": "IdentityQueryEvents",
-                                        "label": "IdentityQueryEvents"
-                                    },
-                                    {
-                                        "value": "IdentityDirectoryEvents",
-                                        "label": "IdentityDirectoryEvents"
-                                    },
-                                    {
-                                        "value": "CloudAppEvents",
-                                        "label": "CloudAppEvents"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "field": "index",
-                            "label": "Index",
-                            "type": "singleSelect",
-                            "defaultValue": "default",
-                            "options": {
-                                "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
-                            },
-                            "help": "Index in which data will be collected",
-                            "required": true,
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 80,
-                                    "errorMsg": "Length of index name should be between 1 and 80."
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "microsoft_defender_endpoint_machines",
-                    "title": "Microsoft Defender Machines",
-                    "entity": [
-                        {
-                            "field": "name",
-                            "label": "Name",
-                            "type": "text",
-                            "help": "Enter a unique name for the data input",
-                            "required": true,
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[a-zA-Z]\\w*$",
-                                    "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                                },
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 100,
-                                    "errorMsg": "Length of input name should be between 1 and 100"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "azure_app_account",
-                            "label": "Azure App Account",
-                            "help": "Azure App Account from which the data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "options": {
-                                "referenceName": "account"
-                            }
-                        },
-                        {
-                            "field": "tenant_id",
-                            "label": "Tenant ID",
-                            "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "location",
-                            "label": "Location",
-                            "help": "GeoLocation (for API) from which data will be collected",
-                            "required": true,
-                            "type": "singleSelect",
-                            "defaultValue": "api.securitycenter.microsoft.com",
-                            "options": {
-                                "disableSearch": true,
-                                "autoCompleteFields": [
-                                    {
-                                        "value": "api.securitycenter.microsoft.com",
-                                        "label": "General"
-                                    },
-                                    {
-                                        "value": "api-us.securitycenter.microsoft.com",
-                                        "label": "US"
-                                    },
-                                    {
-                                        "value": "api-eu.securitycenter.microsoft.com",
-                                        "label": "EU"
-                                    },
-                                    {
-                                        "value": "api-uk.securitycenter.microsoft.com",
-                                        "label": "UK"
-                                    },
-                                    {
-                                        "value": "api-gcc.securitycenter.microsoft.us",
-                                        "label": "GCC"
-                                    },
-                                    {
-                                        "value": "api-gov.securitycenter.microsoft.us",
-                                        "label": "GCC High/DoD"
-                                    },
-                                    {
-                                        "value": "commercial-graph-api",
-                                        "label": "Commercial & GCC - Graph API"
-                                    },
-                                    {
-                                        "value": "gcc-high-graph-api",
-                                        "label": "GCC High - Graph API"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "field": "start_date",
-                            "label": "Start Date (optional)",
-                            "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ],
-                            "options": {
-                                "disableonEdit": true
-                            }
-                        },
-                        {
-                            "field": "interval",
-                            "label": "Interval",
-                            "type": "text",
-                            "required": true,
-                            "help": "Time interval of input in seconds.",
-                            "options": {
-                                "placeholder": "Enter interval here"
-                            },
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "pattern": "^[1-9][0-9]*$",
-                                    "errorMsg": "Interval must be an integer greater than 0"
-                                }
-                            ]
-                        },
-                        {
-                            "field": "index",
-                            "label": "Index",
-                            "type": "singleSelect",
-                            "defaultValue": "default",
-                            "options": {
-                                "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
-                            },
-                            "required": true,
-                            "help": "Index in which data will be collected",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "maxLength": 80,
-                                    "errorMsg": "Length of index name should be between 1 and 80."
-                                }
-                            ]
-                        }
-                    ],
-                    "hook": {
-                        "src": "inputs_hook_2.1.0",
-                        "type": "external"
-                    }
+                  "pattern": "^[a-zA-Z0-9:][a-zA-Z0-9\\.\\-:]+$",
+                  "errorMsg": "Proxy Host is invalid",
+                  "type": "regex"
                 }
-            ]
+              ]
+            },
+            {
+              "field": "proxy_port",
+              "label": "Proxy Port",
+              "type": "text",
+              "required": true,
+              "options": {
+                "placeholder": "Required"
+              },
+              "help": "Port to connect to the Proxy server",
+              "validators": [
+                {
+                  "type": "number",
+                  "range": [1, 65535]
+                },
+                {
+                  "type": "regex",
+                  "errorMsg": "Proxy Port field must be an integer.",
+                  "pattern": "^\\d+$"
+                }
+              ]
+            },
+            {
+              "field": "proxy_username",
+              "label": "Proxy Username",
+              "type": "text",
+              "help": "Username to connect to Proxy server, if any.",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 50,
+                  "errorMsg": "Max length of username is 50"
+                }
+              ]
+            },
+            {
+              "field": "proxy_password",
+              "label": "Proxy Password",
+              "type": "text",
+              "encrypted": true,
+              "help": "Password to connect to Proxy server, if any.",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of password is 8192"
+                }
+              ]
+            }
+          ],
+          "options": {
+            "saveValidator": "function(formData) { if(!formData.proxy_enabled || formData.proxy_enabled === '0') {return true; } if(!formData.proxy_url) { return 'Proxy Host can not be empty'; } if(!formData.proxy_port) { return 'Proxy Port can not be empty'; } return true; }"
+          }
+        },
+        {
+          "name": "logging",
+          "title": "Logging",
+          "entity": [
+            {
+              "field": "loglevel",
+              "label": "Log Level",
+              "help": "(DEBUG, INFO, WARNING, ERROR or CRITICAL)",
+              "type": "singleSelect",
+              "required": true,
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "label": "DEBUG",
+                    "value": "DEBUG"
+                  },
+                  {
+                    "label": "INFO",
+                    "value": "INFO"
+                  },
+                  {
+                    "label": "WARNING",
+                    "value": "WARNING"
+                  },
+                  {
+                    "label": "ERROR",
+                    "value": "ERROR"
+                  },
+                  {
+                    "label": "CRITICAL",
+                    "value": "CRITICAL"
+                  }
+                ]
+              },
+              "defaultValue": "INFO"
+            }
+          ]
         }
+      ]
+    },
+    "inputs": {
+      "title": "Inputs",
+      "description": "Manage your data inputs",
+      "table": {
+        "header": [
+          {
+            "field": "name",
+            "label": "Name"
+          },
+          {
+            "field": "interval",
+            "label": "Interval"
+          },
+          {
+            "field": "index",
+            "label": "Index"
+          },
+          {
+            "field": "disabled",
+            "label": "Status"
+          }
+        ],
+        "moreInfo": [
+          {
+            "field": "name",
+            "label": "Name"
+          },
+          {
+            "field": "interval",
+            "label": "Interval"
+          },
+          {
+            "field": "index",
+            "label": "Index"
+          },
+          {
+            "field": "disabled",
+            "label": "Disabled"
+          },
+          {
+            "field": "azure_app_account",
+            "label": "Azure App Account"
+          },
+          {
+            "field": "tenant_id",
+            "label": "Tenant ID"
+          },
+          {
+            "field": "query",
+            "label": "Hunting Query"
+          },
+          {
+            "field": "start_date",
+            "label": "Start Date (optional)"
+          },
+          {
+            "field": "location",
+            "label": "Location"
+          },
+          {
+            "field": "environment",
+            "label": "Environment"
+          },
+          {
+            "field": "event_hub_namespace",
+            "label": "Event Hub Namespace(FQDN)"
+          },
+          {
+            "field": "event_hub_name",
+            "label": "Event Hub Name"
+          },
+          {
+            "field": "consumer_group",
+            "label": "Consumer Group"
+          },
+          {
+            "field": "streaming_event_types",
+            "label": "Streaming Event Types"
+          }
+        ],
+        "actions": ["edit", "enable", "delete", "clone"]
+      },
+      "services": [
+        {
+          "name": "microsoft_365_defender_endpoint_incidents",
+          "title": "Microsoft 365 Defender Incidents",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
+              "required": false,
+              "type": "text",
+              "options": {
+                "placeholder": "Enter Tenant ID here (optional)"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ]
+            },
+            {
+              "field": "environment",
+              "label": "Environment",
+              "help": "Environment to collect data from",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "commercial",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "commercial",
+                    "label": "Commercial"
+                  },
+                  {
+                    "value": "gcc",
+                    "label": "GCC"
+                  },
+                  {
+                    "value": "gcc-high",
+                    "label": "GCC High"
+                  },
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "start_date",
+              "label": "Start Date (optional)",
+              "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
+              "required": false,
+              "type": "text",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ],
+              "options": {
+                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "help": "Index in which data will be collected",
+              "required": true,
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ],
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          }
+        },
+        {
+          "name": "microsoft_defender_endpoint_atp_alerts",
+          "title": "Microsoft Defender for Endpoint Alerts",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
+              "required": false,
+              "type": "text",
+              "options": {
+                "placeholder": "Enter Tenant ID here (optional)"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ]
+            },
+            {
+              "field": "location",
+              "label": "Location",
+              "help": "GeoLocation (for API) from which data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "api.securitycenter.microsoft.com",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "api.securitycenter.microsoft.com",
+                    "label": "General"
+                  },
+                  {
+                    "value": "api-us.securitycenter.microsoft.com",
+                    "label": "US"
+                  },
+                  {
+                    "value": "api-eu.securitycenter.microsoft.com",
+                    "label": "EU"
+                  },
+                  {
+                    "value": "api-uk.securitycenter.microsoft.com",
+                    "label": "UK"
+                  },
+                  {
+                    "value": "api-gcc.securitycenter.microsoft.us",
+                    "label": "GCC"
+                  },
+                  {
+                    "value": "api-gov.securitycenter.microsoft.us",
+                    "label": "GCC High/DoD"
+                  },
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "start_date",
+              "label": "Start Date (optional)",
+              "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
+              "required": false,
+              "type": "text",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ],
+              "options": {
+                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "required": true,
+              "help": "Index in which data will be collected",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ],
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          }
+        },
+        {
+          "name": "microsoft_defender_endpoint_simulations",
+          "title": "Microsoft Defender Simulations",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "environment",
+              "label": "Environment",
+              "help": "Environment to collect data from",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "commercial-graph-api",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "start_date",
+              "label": "Start Date (optional)",
+              "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
+              "required": false,
+              "type": "text",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ],
+              "options": {
+                "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                },
+                {
+                  "type": "number",
+                  "range": [1, 31536000],
+                  "errorMsg": "Value should be between 1 and 31536000"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "help": "Index in which data will be collected",
+              "required": true,
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ],
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          }
+        },
+        {
+          "name": "microsoft_defender_event_hub",
+          "title": "Microsoft Defender Event Hub",
+          "restHandlerModule": "splunk_ta_ms_security_account_handler_eventhub_rh",
+          "restHandlerClass": "MSSecurityAccountExternalHandler",
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          },
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "event_hub_namespace",
+              "label": "Event Hub Namespace(FQDN)",
+              "help": "Namespace of the Event Hub",
+              "type": "text",
+              "required": true
+            },
+            {
+              "field": "event_hub_name",
+              "label": "Event Hub Name",
+              "help": "Name of the Event Hub",
+              "type": "text",
+              "required": true,
+              "options": {
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "consumer_group",
+              "label": "Consumer Group",
+              "help": "Consumer Group from Event Hub",
+              "type": "text",
+              "defaultValue": "$Default",
+              "required": true,
+              "options": {
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "streaming_event_types",
+              "label": "Streaming Event Types",
+              "help": "Specify which event types to ingest (Default: All).",
+              "type": "multipleSelect",
+              "options": {
+                "delimiter": ",",
+                "items": [
+                  {
+                    "value": "AlertInfo",
+                    "label": "AlertInfo"
+                  },
+                  {
+                    "value": "AlertEvidence",
+                    "label": "AlertEvidence"
+                  },
+                  {
+                    "value": "DeviceInfo",
+                    "label": "DeviceInfo"
+                  },
+                  {
+                    "value": "DeviceNetworkInfo",
+                    "label": "DeviceNetworkInfo"
+                  },
+                  {
+                    "value": "DeviceProcessEvents",
+                    "label": "DeviceProcessEvents"
+                  },
+                  {
+                    "value": "DeviceNetworkEvents",
+                    "label": "DeviceNetworkEvents"
+                  },
+                  {
+                    "value": "DeviceFileEvents",
+                    "label": "DeviceFileEvents"
+                  },
+                  {
+                    "value": "DeviceRegistryEvents",
+                    "label": "DeviceRegistryEvents"
+                  },
+                  {
+                    "value": "DeviceLogonEvents",
+                    "label": "DeviceLogonEvents"
+                  },
+                  {
+                    "value": "DeviceImageLoadEvents",
+                    "label": "DeviceImageLoadEvents"
+                  },
+                  {
+                    "value": "DeviceEvents",
+                    "label": "DeviceEvents"
+                  },
+                  {
+                    "value": "DeviceFileCertificateInfo",
+                    "label": "DeviceFileCertificateInfo"
+                  },
+                  {
+                    "value": "EmailAttachmentInfo",
+                    "label": "EmailAttachmentInfo"
+                  },
+                  {
+                    "value": "EmailEvents",
+                    "label": "EmailEvents"
+                  },
+                  {
+                    "value": "EmailPostDeliveryEvents",
+                    "label": "EmailPostDeliveryEvents"
+                  },
+                  {
+                    "value": "EmailUrlInfo",
+                    "label": "EmailUrlInfo"
+                  },
+                  {
+                    "value": "IdentityLogonEvents",
+                    "label": "IdentityLogonEvents"
+                  },
+                  {
+                    "value": "IdentityQueryEvents",
+                    "label": "IdentityQueryEvents"
+                  },
+                  {
+                    "value": "IdentityDirectoryEvents",
+                    "label": "IdentityDirectoryEvents"
+                  },
+                  {
+                    "value": "CloudAppEvents",
+                    "label": "CloudAppEvents"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "help": "Index in which data will be collected",
+              "required": true,
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "microsoft_defender_endpoint_machines",
+          "title": "Microsoft Defender Machines",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
+              "required": false,
+              "type": "text",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ]
+            },
+            {
+              "field": "location",
+              "label": "Location",
+              "help": "GeoLocation (for API) from which data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "api.securitycenter.microsoft.com",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "api.securitycenter.microsoft.com",
+                    "label": "General"
+                  },
+                  {
+                    "value": "api-us.securitycenter.microsoft.com",
+                    "label": "US"
+                  },
+                  {
+                    "value": "api-eu.securitycenter.microsoft.com",
+                    "label": "EU"
+                  },
+                  {
+                    "value": "api-uk.securitycenter.microsoft.com",
+                    "label": "UK"
+                  },
+                  {
+                    "value": "api-gcc.securitycenter.microsoft.us",
+                    "label": "GCC"
+                  },
+                  {
+                    "value": "api-gov.securitycenter.microsoft.us",
+                    "label": "GCC High/DoD"
+                  },
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "start_date",
+              "label": "Start Date (optional)",
+              "help": "Start date for data collection in UTC timezone. Default: 30 days ago in UTC. Format: YYYY-MM-DDTHH:MM:SSZ",
+              "required": false,
+              "type": "text",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ],
+              "options": {
+                "disableonEdit": true
+              }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "required": true,
+              "help": "Index in which data will be collected",
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ],
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          }
+        },
+        {
+          "name": "microsoft_graph_security_hunting_query",
+          "title": "Microsoft Graph Security Hunting Query",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
+              "required": false,
+              "type": "text",
+              "options": {
+                "placeholder": "Enter Tenant ID here (optional)"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ]
+            },
+            {
+              "field": "query",
+              "label": "Hunting Query",
+              "help": "KQL advanced hunting query to run using Microsoft Graph security/runHuntingQuery.",
+              "required": true,
+              "type": "text",
+              "options": {
+                "placeholder": "Example: DeviceEvents | take 10"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192,
+                  "errorMsg": "Length of Hunting Query should be between 1 and 8192"
+                }
+              ]
+            },
+            {
+              "field": "environment",
+              "label": "Environment",
+              "help": "Microsoft Graph environment to collect data from",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "commercial-graph-api",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                },
+                {
+                  "type": "number",
+                  "range": [1, 31536000],
+                  "errorMsg": "Value should be between 1 and 31536000"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "help": "Index in which data will be collected",
+              "required": true,
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
+  }
 }

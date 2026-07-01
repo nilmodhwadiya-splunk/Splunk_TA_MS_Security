@@ -148,73 +148,108 @@ def get_access_token(
     urls: api_urls,
     logger: logging.Logger,
     session_key: str,
-    use_delegated_permissions: bool = None, 
+    use_delegated_permissions: bool = None,
     delegated_acc_name: str = None,
     environment: str = None,
     add_default: bool = False
 ) -> str:
     """
-    Gets access token
-    :param client_id: client id of the account configured
-    :param client_secret: client secret of the account configured
-    :param ulrs: urls to be used to communicate with microsoft API
-    :param logger: logger object
-    :param session_key: a session key
-    :raises Exception: if access token is not obtained
-    :returns: access token
+    Gets access token.
+    Supports both application auth and delegated OAuth auth.
     """
 
-    if (use_delegated_permissions):
-        delegated_token_cache = get_secrets(delegated_acc_name + "-token_cache",session_key,logger)
+    if use_delegated_permissions:
+        delegated_token_cache = get_secrets(
+            delegated_acc_name + "-token_cache",
+            session_key,
+            logger,
+        )
+
         index = urls.authorization.find("oauth2")
+
         msal_app = msal.ConfidentialClientApplication(
             client_id=client_id,
-            authority=urls.authorization[:index-1],
+            authority=urls.authorization[:index - 1],
             client_credential=client_secret,
             token_cache=msal.SerializableTokenCache(),
         )
+
         msal_app.token_cache.deserialize(json.loads(delegated_token_cache))
         accounts = msal_app.get_accounts()
+
         if accounts:
-            logger.info(f"Account found for delegated access")
-            res = urls.resource
-            if environment and 'graph' not in environment: 
+            logger.info("Account found for delegated access")
+
+            # UPDATED: Force Microsoft Graph scope when using Graph API input
+            if environment and "graph" in environment:
+                res = "https://graph.microsoft.com"
+            else:
+                res = urls.resource
+
+            # Existing logic for non-Graph delegated incident endpoint
+            if environment and "graph" not in environment:
                 res = res + "/Incident.Read"
+
             if add_default:
                 res = res + "/.default"
-            token_result = msal_app.acquire_token_silent([res], account=accounts[0])
+
+            logger.info(f"Using delegated token scope/resource={res}")
+
+            token_result = msal_app.acquire_token_silent(
+                [res],
+                account=accounts[0],
+            )
+
             if not token_result:
-                logger.error(f"Could not fetch token for delegated user with account {delegated_acc_name}")
-                raise ValueError
+                logger.error(
+                    f"Could not fetch token for delegated user with account {delegated_acc_name}"
+                )
+                raise ValueError(
+                    f"Could not fetch delegated token for account {delegated_acc_name}"
+                )
+
             return token_result["access_token"]
+
+        logger.error(
+            f"No cached delegated account found for delegated_acc_name={delegated_acc_name}"
+        )
+        raise ValueError(
+            f"No cached delegated account found for delegated_acc_name={delegated_acc_name}"
+        )
 
     payload = ApiSpecificContent.get_login_payload(
         urls.api, client_id, urls.resource, client_secret
     )
+
     try:
         proxies = get_proxy(logger, session_key)
-        response = requests.post(  # nosemgrep
-            urls.authorization, data=payload, proxies=proxies, timeout=60
+        response = requests.post(
+            urls.authorization,
+            data=payload,
+            proxies=proxies,
+            timeout=60,
         ).json()
+
         if response.get("error_description"):
             logger.error(
                 f'action=fetch_token_failure, reason={response["error_description"]}'
             )
             sys.exit(1)
-        # INFO is 20, so we don't want to decode the access token redundantly unless the DEBUG logs are enabled
+
         if logger.level < logging.INFO:
             logger.debug(
                 splunk_ta_ms_security_constants.TOKEN_ROLES_MESSAGE.format(
                     roles=decode_access_token(response["access_token"], logger=logger)
                 )
             )
+
         return response["access_token"]
+
     except Exception as e:
         logger.error(
             f"Splunk Exception occurred while retrieving access token, reason={e}"
         )
         raise e
-
 
 @lru_cache(maxsize=8)
 def get_proxy(logger: logging.Logger, session_key: str) -> Optional[Dict[str, str]]:
