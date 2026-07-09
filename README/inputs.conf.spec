@@ -4,6 +4,12 @@ tenant_id = tenant_id of azure account
 start_date = date from where user wants to collect data, in a specific format
 environment = endpoint to collect data from
 
+[microsoft_365_defender_advanced_hunting://<name>]
+azure_app_account = account created in configuration page using client_id and client_secret
+tenant_id = tenant_id of azure account
+environment = endpoint to collect data from
+query = advanced hunting KQL query; include your own time filter for incremental collection
+
 [microsoft_defender_endpoint_simulations://<name>]
 azure_app_account = account created in configuration page using client_id and client_secret
 start_date = date from where user wants to collect data, in a specific format
@@ -28,18 +34,10 @@ tenant_id = tenant_id of azure account
 location = localtion of server close to user's geolocation
 start_date = date from where user wants to collect data, in a specific format
 
-### NEW - Microsoft Graph Security Advanced Hunting input
-### Endpoint:
-### POST https://graph.microsoft.com/v1.0/security/runHuntingQuery
-### This API runs KQL advanced hunting queries in Microsoft 365 Defender.
-[microsoft_graph_security_hunting_query://<name>]
-azure_app_account = account created in configuration page using client_id and client_secret
-tenant_id = tenant_id of azure account
-query = KQL hunting query to run against Microsoft 365 Defender advanced hunting data
-start_date = date from where user wants to collect data, in a specific format
-environment = Microsoft Graph endpoint/environment to collect data from
-
 [microsoft_365_defender_endpoint_incidents]
+python.version = {default|python3}
+
+[microsoft_365_defender_advanced_hunting]
 python.version = {default|python3}
 
 [microsoft_defender_endpoint_simulations]
@@ -52,8 +50,4 @@ python.version = {default|python3}
 python.version = {default|python3}
 
 [microsoft_defender_endpoint_machines]
-python.version = {default|python3}
-
-### NEW - Python version for Microsoft Graph Security Advanced Hunting input
-[microsoft_graph_security_hunting_query]
 python.version = {default|python3}

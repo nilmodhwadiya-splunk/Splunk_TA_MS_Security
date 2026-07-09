@@ -15,6 +15,7 @@ from Splunk_TA_MS_Security.environment_specific_urls import EnvironmentSpecificU
 from alert_actions_base import ModularAlertBase
 from ms_security_utils import (
     get_access_token,
+    get_account_details,
     get_credentials,
     required,
     get_current_addon_version,
@@ -51,12 +52,23 @@ class AdvancedHuntingHelper:
 
         self.tenant_id_from_input = invoker.get_param("tenant_id")
         self.acc_tenant_id = ""
+        self.account_name = invoker.get_param("account_name")
         self.environment = invoker.get_param("environment") or "default"
         self.accessTokens = {}
+        self.use_delegated_permissions = False
+        self.delegated_acc_name = None
 
         self.client_id, self.client_secret, self.acc_tenant_id = get_credentials(
             invoker, self.session_key, self.logger
         )
+        if self.account_name:
+            account = get_account_details(
+                self.logger, self.session_key, self.account_name
+            )
+            self.use_delegated_permissions = account.get(
+                "use_delegated_permissions", False
+            )
+            self.delegated_acc_name = account.get("delegated_acc_name")
 
         self.index = "main"
         self.source = "_advanced_hunting"
@@ -128,6 +140,10 @@ class AdvancedHuntingHelper:
                 urls,
                 logger,
                 self.session_key,
+                self.use_delegated_permissions,
+                self.delegated_acc_name,
+                self.environment,
+                add_default=True,
             )
         except Exception as e:
             logger.error(

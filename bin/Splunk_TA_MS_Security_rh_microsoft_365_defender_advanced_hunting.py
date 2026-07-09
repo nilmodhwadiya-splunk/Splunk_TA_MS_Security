@@ -1,6 +1,5 @@
-## new file
 ##
-# SPDX-FileCopyrightText: 2021 Splunk, Inc. <sales@splunk.com>
+# SPDX-FileCopyrightText: 2026 Splunk, Inc. <sales@splunk.com>
 # SPDX-License-Identifier: LicenseRef-Splunk-8-2021
 ##
 ##
@@ -13,14 +12,7 @@ from typing import Any
 from Splunk_TA_MS_Security_account_validation import account_validation
 from splunktaucclib.rest_handler import admin_external, util
 from splunktaucclib.rest_handler.admin_external import AdminExternalHandler
-from splunktaucclib.rest_handler.endpoint import (
-    DataInputModel,
-    RestModel,
-    field,
-    validator,
-)
-
-LOG_FILE_NAME = "microsoft_graph_security_hunting_query.log"
+from splunktaucclib.rest_handler.endpoint import DataInputModel, RestModel, field, validator
 
 util.remove_http_proxy_env_vars()
 
@@ -30,7 +22,7 @@ fields = [
         "interval",
         required=True,
         encrypted=False,
-        default=300,
+        default=None,
         validator=validator.Number(
             max_val=31536000,
             min_val=1,
@@ -65,6 +57,13 @@ fields = [
         ),
     ),
     field.RestField(
+        "environment",
+        required=True,
+        encrypted=False,
+        default="commercial-graph-api",
+        validator=None,
+    ),
+    field.RestField(
         "query",
         required=True,
         encrypted=False,
@@ -74,20 +73,13 @@ fields = [
             min_len=1,
         ),
     ),
-    field.RestField(
-        "environment",
-        required=False,
-        encrypted=False,
-        default="commercial-graph-api",
-        validator=None,
-    ),
     field.RestField("disabled", required=False, validator=None),
 ]
-
 model = RestModel(fields, name=None)
 
+
 endpoint = DataInputModel(
-    "microsoft_graph_security_hunting_query",
+    "microsoft_365_defender_advanced_hunting",
     model,
 )
 

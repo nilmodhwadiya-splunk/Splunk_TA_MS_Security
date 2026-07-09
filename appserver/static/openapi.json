@@ -1,2211 +1,2094 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "Splunk_TA_MS_Security",
-        "version": "2.3.3",
-        "description": "Splunk Add-on for Microsoft Security",
-        "contact": {
-            "name": "Splunk, Inc."
-        },
-        "license": {
-            "name": "Splunk Software License Agreement"
-        }
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Splunk_TA_MS_Security",
+    "version": "2.3.0",
+    "description": "Splunk Add-on for Microsoft Security",
+    "contact": {
+      "name": "Splunk, Inc.",
+      "email": "support@splunk.com"
     },
-    "servers": [
-        {
-            "url": "https://{domain}:{port}/servicesNS/-/Splunk_TA_MS_Security",
-            "variables": {
-                "domain": {
-                    "default": "localhost"
-                },
-                "port": {
-                    "default": "8089"
-                }
-            },
-            "description": "Access via management interface"
+    "license": {
+      "name": "Splunk Software License Agreement"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{domain}:{port}/servicesNS/-/Splunk_TA_MS_Security",
+      "variables": {
+        "domain": {
+          "default": "localhost"
+        },
+        "port": {
+          "default": "8089"
         }
-    ],
-    "components": {
-        "schemas": {
-            "account": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "username": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string",
-                        "format": "password"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "use_delegated_permissions": {
-                        "type": "string"
-                    },
-                    "delegated_acc_name": {
-                        "type": "string"
+      },
+      "description": "Access via management interface"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "account": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "tenant_id": {
+            "type": "string"
+          }
+        }
+      },
+      "account_without_name": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "tenant_id": {
+            "type": "string"
+          }
+        }
+      },
+      "proxy": {
+        "type": "object",
+        "properties": {
+          "proxy_enabled": {
+            "type": "string"
+          },
+          "proxy_url": {
+            "type": "string"
+          },
+          "proxy_port": {
+            "type": "string"
+          },
+          "proxy_username": {
+            "type": "string"
+          },
+          "proxy_password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "proxy_without_name": {
+        "type": "object",
+        "properties": {
+          "proxy_enabled": {
+            "type": "string"
+          },
+          "proxy_url": {
+            "type": "string"
+          },
+          "proxy_port": {
+            "type": "string"
+          },
+          "proxy_username": {
+            "type": "string"
+          },
+          "proxy_password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "logging": {
+        "type": "object",
+        "properties": {
+          "loglevel": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+          }
+        }
+      },
+      "logging_without_name": {
+        "type": "object",
+        "properties": {
+          "loglevel": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+          }
+        }
+      },
+      "microsoft_365_defender_endpoint_incidents": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "commercial",
+              "gcc",
+              "gcc-high",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_365_defender_endpoint_incidents_without_name": {
+        "type": "object",
+        "properties": {
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "commercial",
+              "gcc",
+              "gcc-high",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_365_defender_endpoint_incidents_without_disabled": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "commercial",
+              "gcc",
+              "gcc-high",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          }
+        }
+      },
+      "microsoft_365_defender_advanced_hunting": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "query": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_365_defender_advanced_hunting_without_name": {
+        "type": "object",
+        "properties": {
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "query": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_365_defender_advanced_hunting_without_disabled": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "query": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          }
+        }
+      },
+      "microsoft_defender_endpoint_atp_alerts": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "enum": [
+              "api.securitycenter.microsoft.com",
+              "api-us.securitycenter.microsoft.com",
+              "api-eu.securitycenter.microsoft.com",
+              "api-uk.securitycenter.microsoft.com",
+              "api-gcc.securitycenter.microsoft.us",
+              "api-gov.securitycenter.microsoft.us",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_endpoint_atp_alerts_without_name": {
+        "type": "object",
+        "properties": {
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "enum": [
+              "api.securitycenter.microsoft.com",
+              "api-us.securitycenter.microsoft.com",
+              "api-eu.securitycenter.microsoft.com",
+              "api-uk.securitycenter.microsoft.com",
+              "api-gcc.securitycenter.microsoft.us",
+              "api-gov.securitycenter.microsoft.us",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_endpoint_atp_alerts_without_disabled": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "enum": [
+              "api.securitycenter.microsoft.com",
+              "api-us.securitycenter.microsoft.com",
+              "api-eu.securitycenter.microsoft.com",
+              "api-uk.securitycenter.microsoft.com",
+              "api-gcc.securitycenter.microsoft.us",
+              "api-gov.securitycenter.microsoft.us",
+              "commercial-graph-api",
+              "gcc-high-graph-api"
+            ]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          }
+        }
+      },
+      "microsoft_defender_endpoint_simulations": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_endpoint_simulations_without_name": {
+        "type": "object",
+        "properties": {
+          "azure_app_account": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_endpoint_simulations_without_disabled": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": ["commercial-graph-api", "gcc-high-graph-api"]
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          }
+        }
+      },
+      "microsoft_defender_event_hub": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "event_hub_namespace": {
+            "type": "string"
+          },
+          "event_hub_name": {
+            "type": "string"
+          },
+          "consumer_group": {
+            "type": "string"
+          },
+          "streaming_event_types": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_event_hub_without_name": {
+        "type": "object",
+        "properties": {
+          "azure_app_account": {
+            "type": "string"
+          },
+          "event_hub_namespace": {
+            "type": "string"
+          },
+          "event_hub_name": {
+            "type": "string"
+          },
+          "consumer_group": {
+            "type": "string"
+          },
+          "streaming_event_types": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "string",
+            "enum": ["False", "True"]
+          }
+        }
+      },
+      "microsoft_defender_event_hub_without_disabled": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "azure_app_account": {
+            "type": "string"
+          },
+          "event_hub_namespace": {
+            "type": "string"
+          },
+          "event_hub_name": {
+            "type": "string"
+          },
+          "consumer_group": {
+            "type": "string"
+          },
+          "streaming_event_types": {
+            "type": "string"
+          },
+          "index": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "paths": {
+    "/Splunk_TA_MS_Security_account": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/account_without_name"
+                          }
+                        }
+                      }
                     }
+                  }
                 }
-            },
-            "account_without_name": {
-                "type": "object",
-                "properties": {
-                    "username": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string",
-                        "format": "password"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "use_delegated_permissions": {
-                        "type": "string"
-                    },
-                    "delegated_acc_name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "proxy": {
-                "type": "object",
-                "properties": {
-                    "proxy_enabled": {
-                        "type": "string"
-                    },
-                    "proxy_url": {
-                        "type": "string"
-                    },
-                    "proxy_port": {
-                        "type": "string"
-                    },
-                    "proxy_username": {
-                        "type": "string"
-                    },
-                    "proxy_password": {
-                        "type": "string",
-                        "format": "password"
-                    }
-                }
-            },
-            "proxy_without_name": {
-                "type": "object",
-                "properties": {
-                    "proxy_enabled": {
-                        "type": "string"
-                    },
-                    "proxy_url": {
-                        "type": "string"
-                    },
-                    "proxy_port": {
-                        "type": "string"
-                    },
-                    "proxy_username": {
-                        "type": "string"
-                    },
-                    "proxy_password": {
-                        "type": "string",
-                        "format": "password"
-                    }
-                }
-            },
-            "logging": {
-                "type": "object",
-                "properties": {
-                    "loglevel": {
-                        "type": "string",
-                        "enum": [
-                            "DEBUG",
-                            "INFO",
-                            "WARNING",
-                            "ERROR",
-                            "CRITICAL"
-                        ]
-                    }
-                }
-            },
-            "logging_without_name": {
-                "type": "object",
-                "properties": {
-                    "loglevel": {
-                        "type": "string",
-                        "enum": [
-                            "DEBUG",
-                            "INFO",
-                            "WARNING",
-                            "ERROR",
-                            "CRITICAL"
-                        ]
-                    }
-                }
-            },
-            "microsoft_365_defender_endpoint_incidents": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial",
-                            "gcc",
-                            "gcc-high",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_365_defender_endpoint_incidents_without_name": {
-                "type": "object",
-                "properties": {
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial",
-                            "gcc",
-                            "gcc-high",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_365_defender_endpoint_incidents_without_disabled": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial",
-                            "gcc",
-                            "gcc-high",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_atp_alerts": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_atp_alerts_without_name": {
-                "type": "object",
-                "properties": {
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_atp_alerts_without_disabled": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_simulations": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_simulations_without_name": {
-                "type": "object",
-                "properties": {
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_simulations_without_disabled": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "environment": {
-                        "type": "string",
-                        "enum": [
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    }
-                }
-            },
-            "microsoft_defender_event_hub": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "event_hub_namespace": {
-                        "type": "string"
-                    },
-                    "event_hub_name": {
-                        "type": "string"
-                    },
-                    "consumer_group": {
-                        "type": "string"
-                    },
-                    "streaming_event_types": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_event_hub_without_name": {
-                "type": "object",
-                "properties": {
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "event_hub_namespace": {
-                        "type": "string"
-                    },
-                    "event_hub_name": {
-                        "type": "string"
-                    },
-                    "consumer_group": {
-                        "type": "string"
-                    },
-                    "streaming_event_types": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_event_hub_without_disabled": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "event_hub_namespace": {
-                        "type": "string"
-                    },
-                    "event_hub_name": {
-                        "type": "string"
-                    },
-                    "consumer_group": {
-                        "type": "string"
-                    },
-                    "streaming_event_types": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_machines": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_machines_without_name": {
-                "type": "object",
-                "properties": {
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "string",
-                        "enum": [
-                            "False",
-                            "True"
-                        ]
-                    }
-                }
-            },
-            "microsoft_defender_endpoint_machines_without_disabled": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "azure_app_account": {
-                        "type": "string"
-                    },
-                    "tenant_id": {
-                        "type": "string"
-                    },
-                    "location": {
-                        "type": "string",
-                        "enum": [
-                            "api.securitycenter.microsoft.com",
-                            "api-us.securitycenter.microsoft.com",
-                            "api-eu.securitycenter.microsoft.com",
-                            "api-uk.securitycenter.microsoft.com",
-                            "api-gcc.securitycenter.microsoft.us",
-                            "api-gov.securitycenter.microsoft.us",
-                            "commercial-graph-api",
-                            "gcc-high-graph-api"
-                        ]
-                    },
-                    "start_date": {
-                        "type": "string"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "index": {
-                        "type": "string"
-                    }
-                }
+              }
             }
+          }
         },
-        "securitySchemes": {
-            "BasicAuth": {
-                "type": "http",
-                "scheme": "basic"
+        "description": "Get list of items for account",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/account_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-        }
-    },
-    "paths": {
-        "/Splunk_TA_MS_Security_account": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for account",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/account_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for account",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in account",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/account_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in account",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/account"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
+          }
         },
-        "/Splunk_TA_MS_Security_account/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get account item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/account_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get account item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update account item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/account_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update account item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/account_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete account item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/account_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete account item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
+        "description": "Create item in account",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/account"
+              }
+            }
+          },
+          "required": false
         },
-        "/Splunk_TA_MS_Security_settings/proxy": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for proxy",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/proxy_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for proxy",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in proxy",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/proxy_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in proxy",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/proxy"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_settings/logging": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for logging",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/logging_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for logging",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in logging",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/logging_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in logging",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/logging"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_365_defender_endpoint_incidents": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for microsoft_365_defender_endpoint_incidents",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for microsoft_365_defender_endpoint_incidents",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in microsoft_365_defender_endpoint_incidents",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in microsoft_365_defender_endpoint_incidents",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_disabled"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_365_defender_endpoint_incidents/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get microsoft_365_defender_endpoint_incidents item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get microsoft_365_defender_endpoint_incidents item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update microsoft_365_defender_endpoint_incidents item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update microsoft_365_defender_endpoint_incidents item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete microsoft_365_defender_endpoint_incidents item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete microsoft_365_defender_endpoint_incidents item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_atp_alerts": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for microsoft_defender_endpoint_atp_alerts",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for microsoft_defender_endpoint_atp_alerts",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in microsoft_defender_endpoint_atp_alerts",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in microsoft_defender_endpoint_atp_alerts",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_disabled"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_atp_alerts/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get microsoft_defender_endpoint_atp_alerts item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get microsoft_defender_endpoint_atp_alerts item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update microsoft_defender_endpoint_atp_alerts item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update microsoft_defender_endpoint_atp_alerts item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete microsoft_defender_endpoint_atp_alerts item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete microsoft_defender_endpoint_atp_alerts item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_simulations": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for microsoft_defender_endpoint_simulations",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for microsoft_defender_endpoint_simulations",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in microsoft_defender_endpoint_simulations",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in microsoft_defender_endpoint_simulations",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_disabled"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_simulations/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get microsoft_defender_endpoint_simulations item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get microsoft_defender_endpoint_simulations item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update microsoft_defender_endpoint_simulations item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update microsoft_defender_endpoint_simulations item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete microsoft_defender_endpoint_simulations item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete microsoft_defender_endpoint_simulations item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_event_hub": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for microsoft_defender_event_hub",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for microsoft_defender_event_hub",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in microsoft_defender_event_hub",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in microsoft_defender_event_hub",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_event_hub_without_disabled"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_event_hub/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get microsoft_defender_event_hub item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get microsoft_defender_event_hub item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update microsoft_defender_event_hub item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update microsoft_defender_event_hub item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete microsoft_defender_event_hub item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete microsoft_defender_event_hub item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_machines": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get list of items for microsoft_defender_endpoint_machines",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get list of items for microsoft_defender_endpoint_machines",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Create item in microsoft_defender_endpoint_machines",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create item in microsoft_defender_endpoint_machines",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_disabled"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        },
-        "/Splunk_TA_MS_Security_microsoft_defender_endpoint_machines/{name}": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Get microsoft_defender_endpoint_machines item details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Get microsoft_defender_endpoint_machines item details",
-                "deprecated": false
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "Update microsoft_defender_endpoint_machines item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Update microsoft_defender_endpoint_machines item",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                            }
-                        }
-                    },
-                    "required": false
-                },
-                "deprecated": false
-            },
-            "delete": {
-                "responses": {
-                    "200": {
-                        "description": "Delete microsoft_defender_endpoint_machines item",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "entry": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "content": {
-                                                        "$ref": "#/components/schemas/microsoft_defender_endpoint_machines_without_name"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Delete microsoft_defender_endpoint_machines item",
-                "deprecated": false
-            },
-            "parameters": [
-                {
-                    "name": "name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the item to operate on",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "name": "output_mode",
-                    "in": "query",
-                    "required": true,
-                    "description": "Output mode",
-                    "schema": {
-                        "type": "string",
-                        "enum": [
-                            "json"
-                        ],
-                        "default": "json"
-                    }
-                }
-            ]
-        }
-    },
-    "security": [
+        "deprecated": false
+      },
+      "parameters": [
         {
-            "BasicAuth": []
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
         }
-    ]
+      ]
+    },
+    "/Splunk_TA_MS_Security_account/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get account item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/account_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get account item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update account item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/account_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update account item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/account_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete account item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/account_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete account item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_settings/proxy": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for proxy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/proxy_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for proxy",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in proxy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/proxy_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in proxy",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/proxy"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_settings/logging": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for logging",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/logging_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for logging",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in logging",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/logging_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in logging",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/logging"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_365_defender_endpoint_incidents": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for microsoft_365_defender_endpoint_incidents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for microsoft_365_defender_endpoint_incidents",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in microsoft_365_defender_endpoint_incidents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in microsoft_365_defender_endpoint_incidents",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_disabled"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_365_defender_endpoint_incidents/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get microsoft_365_defender_endpoint_incidents item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get microsoft_365_defender_endpoint_incidents item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update microsoft_365_defender_endpoint_incidents item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update microsoft_365_defender_endpoint_incidents item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete microsoft_365_defender_endpoint_incidents item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_endpoint_incidents_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete microsoft_365_defender_endpoint_incidents item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_endpoint_atp_alerts": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for microsoft_defender_endpoint_atp_alerts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for microsoft_defender_endpoint_atp_alerts",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in microsoft_defender_endpoint_atp_alerts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in microsoft_defender_endpoint_atp_alerts",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_disabled"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_365_defender_advanced_hunting": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for microsoft_365_defender_advanced_hunting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for microsoft_365_defender_advanced_hunting",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in microsoft_365_defender_advanced_hunting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in microsoft_365_defender_advanced_hunting",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_disabled"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_365_defender_advanced_hunting/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get microsoft_365_defender_advanced_hunting item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get microsoft_365_defender_advanced_hunting item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update microsoft_365_defender_advanced_hunting item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update microsoft_365_defender_advanced_hunting item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete microsoft_365_defender_advanced_hunting item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_365_defender_advanced_hunting_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete microsoft_365_defender_advanced_hunting item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_endpoint_atp_alerts/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get microsoft_defender_endpoint_atp_alerts item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get microsoft_defender_endpoint_atp_alerts item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update microsoft_defender_endpoint_atp_alerts item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update microsoft_defender_endpoint_atp_alerts item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete microsoft_defender_endpoint_atp_alerts item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_atp_alerts_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete microsoft_defender_endpoint_atp_alerts item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_endpoint_simulations": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for microsoft_defender_endpoint_simulations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for microsoft_defender_endpoint_simulations",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in microsoft_defender_endpoint_simulations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in microsoft_defender_endpoint_simulations",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_disabled"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_endpoint_simulations/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get microsoft_defender_endpoint_simulations item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get microsoft_defender_endpoint_simulations item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update microsoft_defender_endpoint_simulations item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update microsoft_defender_endpoint_simulations item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete microsoft_defender_endpoint_simulations item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_endpoint_simulations_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete microsoft_defender_endpoint_simulations item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_event_hub": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get list of items for microsoft_defender_event_hub",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get list of items for microsoft_defender_event_hub",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Create item in microsoft_defender_event_hub",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create item in microsoft_defender_event_hub",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_event_hub_without_disabled"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    },
+    "/Splunk_TA_MS_Security_microsoft_defender_event_hub/{name}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get microsoft_defender_event_hub item details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get microsoft_defender_event_hub item details",
+        "deprecated": false
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Update microsoft_defender_event_hub item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update microsoft_defender_event_hub item",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Delete microsoft_defender_event_hub item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "$ref": "#/components/schemas/microsoft_defender_event_hub_without_name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete microsoft_defender_event_hub item",
+        "deprecated": false
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "The name of the item to operate on",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "output_mode",
+          "in": "query",
+          "required": true,
+          "description": "Output mode",
+          "schema": {
+            "type": "string",
+            "enum": ["json"],
+            "default": "json"
+          }
+        }
+      ]
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
 }

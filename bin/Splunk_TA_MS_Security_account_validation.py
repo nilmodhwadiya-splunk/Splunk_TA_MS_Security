@@ -59,6 +59,7 @@ class AccountValidator:
         self._validate_payload(payload)
         self.global_account = payload.get("azure_app_account")
         self.tenant_id = payload.get("tenant_id")
+        self.use_delegated_permissions = False
 
         self.environment = payload.get("environment")
         self.location = payload.get("location")
@@ -73,6 +74,13 @@ class AccountValidator:
             urls = self._get_microsoft_urls()
         except (TaExecutionException, ValueError) as execution_exception:
             raise execution_exception
+
+        if self.use_delegated_permissions:
+            logger.info(
+                "Skipping client-credentials validation because the selected account uses delegated permissions"
+            )
+            return
+
         proxies = self._get_proxies(urls.authorization)
         header = {"User-Agent": self._get_user_agent()}
 
@@ -171,6 +179,12 @@ class AccountValidator:
                 raise TaExecutionException(e) from e
             # simply return the tenant_id from the account configs
             tenant_id = account_conf_file.get(self.global_account).get("tenant_id")
+            self.use_delegated_permissions = (
+                account_conf_file.get(self.global_account).get(
+                    "use_delegated_permissions"
+                )
+                == "1"
+            )
         except Exception as e:
             logger.error(
                 f"Failed to get account details from splunk_ta_ms_security_account.conf file for the account: {self.global_account}"

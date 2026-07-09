@@ -398,10 +398,6 @@
             "label": "Tenant ID"
           },
           {
-            "field": "query",
-            "label": "Hunting Query"
-          },
-          {
             "field": "start_date",
             "label": "Start Date (optional)"
           },
@@ -539,6 +535,144 @@
                 "placeholder": "YYYY-MM-DDTHH:MM:SSZ",
                 "disableonEdit": true
               }
+            },
+            {
+              "field": "interval",
+              "label": "Interval",
+              "type": "text",
+              "required": true,
+              "help": "Time interval of input in seconds.",
+              "options": {
+                "placeholder": "Enter interval here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[1-9][0-9]*$",
+                  "errorMsg": "Interval must be an integer greater than 0"
+                }
+              ]
+            },
+            {
+              "field": "index",
+              "label": "Index",
+              "type": "singleSelect",
+              "defaultValue": "default",
+              "options": {
+                "endpointUrl": "data/indexes",
+                "createSearchChoice": true,
+                "denyList": "^_.*$"
+              },
+              "help": "Index in which data will be collected",
+              "required": true,
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "errorMsg": "Length of index name should be between 1 and 80."
+                }
+              ]
+            }
+          ],
+          "hook": {
+            "src": "inputs_hook_2.1.0",
+            "type": "external"
+          }
+        },
+        {
+          "name": "microsoft_365_defender_advanced_hunting",
+          "title": "Microsoft 365 Defender Advanced Hunting",
+          "entity": [
+            {
+              "field": "name",
+              "label": "Name",
+              "type": "text",
+              "help": "Enter a unique name for the data input",
+              "required": true,
+              "options": {
+                "placeholder": "Enter input name here"
+              },
+              "validators": [
+                {
+                  "type": "regex",
+                  "pattern": "^[a-zA-Z]\\w*$",
+                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "errorMsg": "Length of input name should be between 1 and 100"
+                }
+              ]
+            },
+            {
+              "field": "azure_app_account",
+              "label": "Azure App Account",
+              "help": "Azure App Account from which the data will be collected",
+              "required": true,
+              "type": "singleSelect",
+              "options": {
+                "referenceName": "account"
+              }
+            },
+            {
+              "field": "tenant_id",
+              "label": "Tenant ID",
+              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
+              "required": false,
+              "type": "text",
+              "options": {
+                "placeholder": "Enter Tenant ID here (optional)"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 8192,
+                  "errorMsg": "Max length of text input is 8192"
+                }
+              ]
+            },
+            {
+              "field": "environment",
+              "label": "Environment",
+              "help": "Graph API environment to collect advanced hunting data from",
+              "required": true,
+              "type": "singleSelect",
+              "defaultValue": "commercial-graph-api",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {
+                    "value": "commercial-graph-api",
+                    "label": "Commercial & GCC - Graph API"
+                  },
+                  {
+                    "value": "gcc-high-graph-api",
+                    "label": "GCC High - Graph API"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "query",
+              "label": "Query",
+              "help": "Advanced Hunting KQL query. Include your own time filter if you want incremental collection.",
+              "required": true,
+              "type": "text",
+              "options": {
+                "placeholder": "DeviceEvents | take 10"
+              },
+              "validators": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192,
+                  "errorMsg": "Length of query should be between 1 and 8192"
+                }
+              ]
             },
             {
               "field": "interval",
@@ -1213,145 +1347,6 @@
             "src": "inputs_hook_2.1.0",
             "type": "external"
           }
-        },
-        {
-          "name": "microsoft_graph_security_hunting_query",
-          "title": "Microsoft Graph Security Hunting Query",
-          "entity": [
-            {
-              "field": "name",
-              "label": "Name",
-              "type": "text",
-              "help": "Enter a unique name for the data input",
-              "required": true,
-              "options": {
-                "placeholder": "Enter input name here"
-              },
-              "validators": [
-                {
-                  "type": "regex",
-                  "pattern": "^[a-zA-Z]\\w*$",
-                  "errorMsg": "Input Name should not contain whitespace and must start with a letter and followed by alphabetic letters, digits or underscores."
-                },
-                {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "errorMsg": "Length of input name should be between 1 and 100"
-                }
-              ]
-            },
-            {
-              "field": "azure_app_account",
-              "label": "Azure App Account",
-              "help": "Azure App Account from which the data will be collected",
-              "required": true,
-              "type": "singleSelect",
-              "options": {
-                "referenceName": "account"
-              }
-            },
-            {
-              "field": "tenant_id",
-              "label": "Tenant ID",
-              "help": "Tenant ID of the Azure App Account (Override default Tenant ID here)",
-              "required": false,
-              "type": "text",
-              "options": {
-                "placeholder": "Enter Tenant ID here (optional)"
-              },
-              "validators": [
-                {
-                  "type": "string",
-                  "minLength": 0,
-                  "maxLength": 8192,
-                  "errorMsg": "Max length of text input is 8192"
-                }
-              ]
-            },
-            {
-              "field": "query",
-              "label": "Hunting Query",
-              "help": "KQL advanced hunting query to run using Microsoft Graph security/runHuntingQuery.",
-              "required": true,
-              "type": "text",
-              "options": {
-                "placeholder": "Example: DeviceEvents | take 10"
-              },
-              "validators": [
-                {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 8192,
-                  "errorMsg": "Length of Hunting Query should be between 1 and 8192"
-                }
-              ]
-            },
-            {
-              "field": "environment",
-              "label": "Environment",
-              "help": "Microsoft Graph environment to collect data from",
-              "required": true,
-              "type": "singleSelect",
-              "defaultValue": "commercial-graph-api",
-              "options": {
-                "disableSearch": true,
-                "autoCompleteFields": [
-                  {
-                    "value": "commercial-graph-api",
-                    "label": "Commercial & GCC - Graph API"
-                  },
-                  {
-                    "value": "gcc-high-graph-api",
-                    "label": "GCC High - Graph API"
-                  }
-                ]
-              }
-            },
-            {
-              "field": "interval",
-              "label": "Interval",
-              "type": "text",
-              "required": true,
-              "help": "Time interval of input in seconds.",
-              "options": {
-                "placeholder": "Enter interval here"
-              },
-              "validators": [
-                {
-                  "type": "regex",
-                  "pattern": "^[1-9][0-9]*$",
-                  "errorMsg": "Interval must be an integer greater than 0"
-                },
-                {
-                  "type": "number",
-                  "range": [1, 31536000],
-                  "errorMsg": "Value should be between 1 and 31536000"
-                }
-              ]
-            },
-            {
-              "field": "index",
-              "label": "Index",
-              "type": "singleSelect",
-              "defaultValue": "default",
-              "options": {
-                "endpointUrl": "data/indexes",
-                "createSearchChoice": true,
-                "denyList": "^_.*$"
-              },
-              "help": "Index in which data will be collected",
-              "required": true,
-              "validators": [
-                {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 80,
-                  "errorMsg": "Length of index name should be between 1 and 80."
-                }
-              ]
-            }
-          ]
         }
       ]
     }
